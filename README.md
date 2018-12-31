@@ -5,4 +5,4 @@ de manière aléatoire par le Générateur sur 3 afficheurs en utilisant deux st
     -Atomique   
     -Séquentielle       
     
-Les détails de l'implémentation se trouve dans la javadoc nommée: index.html
+Les détails de l'implémentation se trouve dans la javadoc.
