@@ -1,24 +1,31 @@
 package chanel;
 
 import generator.Generator;
-import generator.GeneratorImpl;
 import generator.GeneratorAsync;
 import observer.ObserverGenerator;
 import observer.ObserverGeneratorAsync;
 import observer.Subject;
 
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Channel,implemented in order to transmit values, from Generator, to Displayer
+ * Channel reprensents the Proxy in Active Object design pattern
+ * It had two roles:
+ * From Displayer to Generator , channel represents GeneratorAsyn that is a proxy
+ * of Generator; ie Displayer sees Channel as a Generator *
+ *
+ * From Generator to Displayer, channel represents Subject that get value
+ *
+ * */
 public class Channel implements ObserverGeneratorAsync<Generator>, GeneratorAsync, Subject<GeneratorAsync> {
 
     ScheduledExecutorService scheduled;
     Generator generator;
-    //liste des observateurs du chanel => displayer
-   ObserverGenerator<GeneratorAsync> observerGeneratorChannel;
+    ObserverGenerator<GeneratorAsync> observerGeneratorChannel;
     int delay;
 
     public Channel(Generator generator, int delay) {
@@ -30,26 +37,40 @@ public class Channel implements ObserverGeneratorAsync<Generator>, GeneratorAsyn
         this.scheduled = scheduled;
     }
 
+    /**
+     * Get result of GetValue from GeneratorAsync in order to return and to display a Future
+     * @return Future of Integer of GetValue Method Invocation
+     * */
     public Future<Integer> getValue() {
         GetValue getValue = new GetValue(this.generator);
         return this.scheduled.schedule(getValue, this.delay, TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * Get result of Update
+     * @param g: the generator which notify its observers
+     * @return Future of Void of Update Method Invocation
+     * */
     public Future<Void> update(Generator g) {
         //Update update = new Update(this.generator);
         Update update = new Update(this, this.observerGeneratorChannel);
         return this.scheduled.schedule(update, this.delay, TimeUnit.MILLISECONDS);
     }
 
-
-    public void setDisplayer(ObserverGenerator displayer) {
-    }
-
+    /**
+     * Attach channel's observers: Displayer which will display value from Generator
+     * @param observerGenerator
+     *
+     * */
     public void attach(ObserverGenerator<GeneratorAsync> observerGenerator) {
         this.observerGeneratorChannel = observerGenerator;
-
     }
 
+    /**
+     * Detach channel's observers: Displayer
+     * @param observerGenerator
+     *
+     * */
     public void detach(ObserverGenerator<GeneratorAsync> observerGenerator) {
         this.observerGeneratorChannel =null;
     }

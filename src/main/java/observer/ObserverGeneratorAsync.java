@@ -1,13 +1,14 @@
 package observer;
 
 import generator.Generator;
-import generator.GeneratorImpl;
-
 import java.util.concurrent.Future;
 
+/**
+ * Represents asynchronous Generic Observer in Observer Design Pattern
+ * @param <T> is a Generic Type
+ */
 public interface ObserverGeneratorAsync<T> {
 
     Future<Void> update(Generator g);
-    void setDisplayer(ObserverGenerator displayer);
 
 }
