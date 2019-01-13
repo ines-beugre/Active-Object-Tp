@@ -47,9 +47,15 @@ public class mainDisplay {
      //   generator.generateValue();
 
         // remplace le generateValue()
+        //Cohérence Séquentielle
         DiffusionStrategy strategy = new Sequential();
         strategy.configure(generator);
-       // strategy.run();
+
+        //Cohérence Séquentielle
+        /*DiffusionStrategy sequential = new Atomic();
+        sequential.configure(generator);*/
+
+        // strategy.run();
         scheduled.scheduleAtFixedRate(() -> strategy.run(), 0, 1000, TimeUnit.MILLISECONDS);
 
     }
